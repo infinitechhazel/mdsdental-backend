@@ -18,6 +18,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CaseStudyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -189,3 +190,11 @@ Route::middleware(['auth:sanctum'])
     ->group(function () {
         Route::apiResource('services', ServiceController::class);
     });
+
+// Results
+Route::get('/cases', [CaseStudyController::class, 'index']);
+Route::get('/cases/{id}', [CaseStudyController::class, 'show']);
+
+Route::post('/cases', [CaseStudyController::class, 'store']);
+Route::put('/cases/{id}', [CaseStudyController::class, 'update']);
+Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
