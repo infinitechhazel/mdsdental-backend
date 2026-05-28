@@ -15,28 +15,18 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'address',
-        'city',
-        'zip_code',
         'password',
-        'role', // Added role to fillable fields
-        'status', // Add this line
-        'verification_token',
-        'verification_token_expiry',
-        'email_verified',
+        'role',
+        'status',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-         'verification_token',
     ];
 
-   
-     protected $casts = [
+    protected $casts = [
         'email_verified_at' => 'datetime',
-        'verification_token_expiry' => 'datetime',
-        'email_verified' => 'boolean',
         'password' => 'hashed',
     ];
 

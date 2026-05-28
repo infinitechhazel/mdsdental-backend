@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->text('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('zip_code', 20)->nullable();
             $table->string('password');
 
             $table->enum('role', ['admin', 'customer'])->default('customer');

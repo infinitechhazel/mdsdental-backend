@@ -17,6 +17,7 @@ use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Route::get('/health', function () {
 
 // Authentication Routes
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::middleware('throttle:5,1')->post('/register', [AuthController::class, 'register']);
 
     // Limit login attempts to 5 per minute per IP
     Route::middleware('throttle:5,1')->post('/login', [AuthController::class, 'login']);
@@ -50,9 +51,6 @@ Route::prefix('auth')->group(function () {
         Route::put('/profile', [AuthController::class, 'updateProfile']);
     });
 });
-// email verification routes
-Route::get('/auth/verify-email', [AuthController::class, 'verifyEmail']);
-Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
 
 // Contact Routes
 Route::prefix('contacts')->group(function () {
@@ -149,7 +147,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Announcement Management
     Route::post('/announcements', [AnnouncementController::class, 'store']);
-
 });
 
 Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update']);
@@ -168,8 +165,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Settings Routes
-Route::get('/settings', [SettingController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/settings', [SettingController::class, 'show']);
     Route::put('/settings', [SettingController::class, 'update']);
 });
 
@@ -185,3 +182,10 @@ Route::middleware('auth:sanctum')->group(function () {
 // Support Ticket Routes
 Route::apiResource('support-tickets', SupportTicketController::class);
 Route::put('/support-tickets/{supportTicket}', [SupportTicketController::class, 'update']);
+
+
+//Services
+Route::middleware(['auth:sanctum'])
+    ->group(function () {
+        Route::apiResource('services', ServiceController::class);
+    });
