@@ -34,7 +34,13 @@ class ServiceController extends Controller
             $query->where('status', $request->status);
         }
 
-        $services = $query->latest()->paginate(10)->withQueryString();
+        // ✅ FIX: dynamic pagination
+        $perPage = $request->get('per_page', 10);
+
+        $services = $query
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
 
         return response()->json($services);
     }
