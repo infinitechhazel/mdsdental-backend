@@ -34,7 +34,6 @@ class ServiceController extends Controller
             $query->where('status', $request->status);
         }
 
-        // ✅ FIX: dynamic pagination
         $perPage = $request->get('per_page', 10);
 
         $services = $query
