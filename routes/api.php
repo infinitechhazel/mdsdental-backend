@@ -1,25 +1,26 @@
 <?php
 
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+<<<<<<< HEAD
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\BookingController;
+=======
+>>>>>>> 7be0bdfd869870c656e7bc108e0d9a71f501ef93
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CaseStudyController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/health', function () {
     return response()->json([
         'success' => true,
-        'message' => 'Lumè Bean and Bar API is running!',
+        'message' => 'API is running!',
         'timestamp' => now()->toISOString(),
     ]);
 });
@@ -63,6 +64,7 @@ Route::prefix('contacts')->group(function () {
     Route::delete('/{contact}', [ContactController::class, 'destroy']);
 });
 
+<<<<<<< HEAD
 // Reservation Routes
 Route::prefix('reservations')->group(function () {
     // Public routes - MUST be before dynamic routes
@@ -106,98 +108,31 @@ Route::prefix('products')->group(function () {
     Route::get('/{product}', [ProductController::class, 'show']);
 });
 
+=======
+>>>>>>> 7be0bdfd869870c656e7bc108e0d9a71f501ef93
 // Public Testimonials
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 
-// Dashboard Analytics
-Route::get('/dashboard/analytics', [DashboardController::class, 'analytics']);
-
-// Blog Posts Routes
-Route::prefix('blog-posts')->group(function () {
-    Route::get('/', [BlogPostController::class, 'index']);
-    Route::post('/', [BlogPostController::class, 'store']);
-    Route::get('/{blogPost}', [BlogPostController::class, 'show']);
-    Route::post('/{blogPost}', [BlogPostController::class, 'update']); // For FormData with _method
-    Route::put('/{blogPost}', [BlogPostController::class, 'update']);
-    Route::delete('/{blogPost}', [BlogPostController::class, 'destroy']);
-    Route::post('/video/upload-chunk', [BlogPostController::class, 'uploadVideoChunk']);
-});
-
-// Event Routes (Public: index, show, store | Protected: update, destroy)
-Route::prefix('events')->group(function () {
-    Route::get('/', [EventController::class, 'index']);
-    Route::get('/{id}', [EventController::class, 'show']);
-    Route::post('/', [EventController::class, 'store']); // Public - anyone can book
-
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::patch('/{id}', [EventController::class, 'update']);
-        Route::put('/{id}', [EventController::class, 'update']);
-        Route::delete('/{id}', [EventController::class, 'destroy']);
-    });
-});
-
 // Protected Routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
-    // Order Routes
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/orders', [OrderController::class, 'store']);
-    Route::get('/orders/{id}', [OrderController::class, 'show']);
-    Route::patch('/orders/{id}', [OrderController::class, 'update']);
-    Route::put('/orders/{id}', [OrderController::class, 'update']);
-    Route::get('/order-items', [OrderController::class, 'getOrderItems']);
-    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
-    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancelOrder']);
-    // Product Management (admin)
-
-    Route::put('/products/{product}', [ProductController::class, 'update']);
-    // Route::post('/products/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-    Route::post('/products/bulk-delete', [ProductController::class, 'bulkDelete']);
 
     // User Management
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
-
-    // Announcement Management
-    Route::post('/announcements', [AnnouncementController::class, 'store']);
 });
 
 Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update']);
 Route::post('/testimonials', [TestimonialController::class, 'store']);
 Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
 
-Route::post('/products', [ProductController::class, 'store']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    // Address routes
-    Route::get('/addresses', [AddressController::class, 'index']);
-    Route::post('/addresses', [AddressController::class, 'store']);
-    Route::put('/addresses/{address}', [AddressController::class, 'update']);
-    Route::delete('/addresses/{address}', [AddressController::class, 'destroy']);
-    Route::post('/addresses/{address}/set-default', [AddressController::class, 'setDefault']);
-});
 
 // Settings Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/settings', [SettingController::class, 'show']);
     Route::put('/settings', [SettingController::class, 'update']);
 });
-
-// Payment Methods Routes
-Route::get('/payment-methods', [PaymentMethodController::class, 'index']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/payment-methods', [PaymentMethodController::class, 'store']);
-    Route::put('/payment-methods/{id}', [PaymentMethodController::class, 'update']);
-    Route::delete('/payment-methods/{id}', [PaymentMethodController::class, 'destroy']);
-});
-
-// Support Ticket Routes
-Route::apiResource('support-tickets', SupportTicketController::class);
-Route::put('/support-tickets/{supportTicket}', [SupportTicketController::class, 'update']);
-
 
 //Services
 Route::middleware(['auth:sanctum'])
@@ -212,3 +147,22 @@ Route::get('/cases/{id}', [CaseStudyController::class, 'show']);
 Route::post('/cases', [CaseStudyController::class, 'store']);
 Route::put('/cases/{id}', [CaseStudyController::class, 'update']);
 Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // inventory
+    Route::apiResource('inventories', InventoryController::class);
+
+    // dashboard (history-based stats)
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // booking history (your appointment page)
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::get('/bookings/{id}', [BookingController::class, 'show']);
+
+    // admin action
+    Route::patch('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
+
+    // optional create
+    Route::post('/bookings', [BookingController::class, 'store']);
+});
