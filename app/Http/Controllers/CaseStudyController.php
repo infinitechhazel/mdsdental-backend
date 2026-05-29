@@ -18,20 +18,15 @@ class CaseStudyController extends Controller
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('patient_name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                $q->where('treatment', 'like', "%{$search}%")
+                    ->orWhere('patient', 'like', "%{$search}%")
+                    ->orWhere('result', 'like', "%{$search}%");
             });
         }
 
         // CATEGORY FILTER
         if ($request->filled('category')) {
-            $query->where('case_type', $request->category);
-        }
-
-        // SEVERITY FILTER (optional but useful)
-        if ($request->filled('severity')) {
-            $query->where('severity', $request->severity);
+            $query->where('category', $request->category);
         }
 
         $cases = $query->latest()->paginate($request->per_page ?? 10);
@@ -43,15 +38,16 @@ class CaseStudyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category' => 'required',
-            'treatment' => 'required',
+            'category' => 'required|string',
+            'treatment' => 'required|string',
             'before_image' => 'required|image',
             'after_image' => 'required|image',
-            'result' => 'required',
-            'duration' => 'nullable',
+            'result' => 'required|string',
+
+            'duration' => 'nullable|string',
             'rating' => 'nullable|integer',
-            'testimonial' => 'nullable',
-            'patient' => 'nullable',
+            'testimonial' => 'nullable|string',
+            'patient' => 'nullable|string',
         ]);
 
         $case = CaseStudy::create([
@@ -62,6 +58,7 @@ class CaseStudyController extends Controller
             'after_image'  => $this->handleImageUpload($request->file('after_image')),
 
             'result' => $request->result,
+
             'duration' => $request->duration,
             'rating' => $request->rating ?? 5,
             'testimonial' => $request->testimonial,
@@ -83,6 +80,7 @@ class CaseStudyController extends Controller
             'category' => $request->category,
             'treatment' => $request->treatment,
             'result' => $request->result,
+
             'duration' => $request->duration,
             'rating' => $request->rating,
             'testimonial' => $request->testimonial,
@@ -116,7 +114,7 @@ class CaseStudyController extends Controller
         ]);
     }
 
-    // YOUR IMAGE UPLOAD FUNCTION
+    // IMAGE UPLOAD
     private function handleImageUpload($file): string
     {
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
