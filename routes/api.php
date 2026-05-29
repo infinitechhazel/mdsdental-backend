@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TestimonialController;
@@ -78,6 +79,19 @@ Route::prefix('reservations')->group(function () {
         Route::put('/{reservation}', [ReservationController::class, 'update']);
         Route::patch('/{reservation}', [ReservationController::class, 'update']);
         Route::delete('/{reservation}', [ReservationController::class, 'destroy']);
+    });
+});
+
+// Booking Routes
+Route::prefix('bookings')->group(function () {
+    Route::post('/', [BookingController::class, 'store']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/', [BookingController::class, 'index']);
+        Route::get('/{booking}', [BookingController::class, 'show']);
+        Route::put('/{booking}', [BookingController::class, 'update']);
+        Route::patch('/{booking}', [BookingController::class, 'update']);
+        Route::delete('/{booking}', [BookingController::class, 'destroy']);
     });
 });
 

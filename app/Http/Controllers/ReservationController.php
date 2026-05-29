@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -93,6 +94,51 @@ class ReservationController extends Controller
             'RES-' . $today . '-' . str_pad($next, 4, '0', STR_PAD_LEFT);
 
         $reservation = Reservation::create($validated);
+
+        try {
+            $adminEmail = env('ADMIN_EMAIL', config('mail.from.address'));
+            $siteName = config('app.name', 'MDS Dental');
+            $customerSubject = 'Booking Received — ' . $siteName;
+            $adminSubject = 'New Booking Created — ' . $siteName;
+
+            $customerMessage = "Hello {$reservation->name},\n\n" .
+                "Your appointment has been received successfully.\n\n" .
+                "Booking details:\n" .
+                "Service: {$reservation->package}\n" .
+                "Date: {$reservation->date}\n" .
+                "Time: {$reservation->time}\n" .
+                "Phone: {$reservation->phone}\n" .
+                "Reservation number: {$reservation->reservation_number}\n\n" .
+                "Thank you for choosing {$siteName}. We will confirm your booking shortly.";
+
+            $adminMessage = "A new booking has been created.\n\n" .
+                "Customer: {$reservation->name}\n" .
+                "Email: {$reservation->email}\n" .
+                "Phone: {$reservation->phone}\n" .
+                "Service: {$reservation->package}\n" .
+                "Date: {$reservation->date}\n" .
+                "Time: {$reservation->time}\n" .
+                "Reservation number: {$reservation->reservation_number}\n\n" .
+                "Please review it in the dashboard.";
+
+            if ($reservation->email) {
+                Mail::raw($customerMessage, function ($message) use ($reservation, $customerSubject, $siteName) {
+                    $message->to($reservation->email)
+                        ->subject($customerSubject)
+                        ->from(config('mail.from.address'), $siteName);
+                });
+            }
+
+            if ($adminEmail) {
+                Mail::raw($adminMessage, function ($message) use ($adminEmail, $adminSubject, $siteName) {
+                    $message->to($adminEmail)
+                        ->subject($adminSubject)
+                        ->from(config('mail.from.address'), $siteName);
+                });
+            }
+        } catch (\Exception $e) {
+            Log::error('Booking email notification failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,
