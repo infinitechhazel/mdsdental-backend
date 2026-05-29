@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,13 +16,15 @@ return new class extends Migration {
             $table->string('before_image');
             $table->string('after_image');
 
-            $table->string('result');
+            $table->text('result');
+
             $table->string('duration')->nullable();
 
-            $table->tinyInteger('rating')->default(5);
-            $table->text('testimonial');
+            $table->tinyInteger('rating')->nullable()->default(5);
 
-            $table->string('patient');
+            $table->text('testimonial')->nullable();
+
+            $table->string('patient')->nullable();
 
             $table->timestamps();
         });
