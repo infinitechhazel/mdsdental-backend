@@ -1,18 +1,9 @@
 <?php
 
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -20,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CaseStudyController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/health', function () {
     return response()->json([
         'success' => true,
-        'message' => 'Lumè Bean and Bar API is running!',
+        'message' => 'API is running!',
         'timestamp' => now()->toISOString(),
     ]);
 });
@@ -65,11 +57,6 @@ Route::prefix('contacts')->group(function () {
 
 // Public Testimonials
 Route::get('/testimonials', [TestimonialController::class, 'index']);
-
-// Dashboard Analytics
-Route::get('/dashboard/analytics', [DashboardController::class, 'analytics']);
-
-
 
 // Protected Routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
@@ -107,5 +94,20 @@ Route::put('/cases/{id}', [CaseStudyController::class, 'update']);
 Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
 
 
-// inventory
-Route::apiResource('inventories', InventoryController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    // inventory
+    Route::apiResource('inventories', InventoryController::class);
+
+    // dashboard (history-based stats)
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // booking history (your appointment page)
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::get('/bookings/{id}', [BookingController::class, 'show']);
+
+    // admin action
+    Route::patch('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
+
+    // optional create
+    Route::post('/bookings', [BookingController::class, 'store']);
+});
