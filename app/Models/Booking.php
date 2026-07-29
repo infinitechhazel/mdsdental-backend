@@ -20,12 +20,14 @@ class Booking extends Model
         'name',
         'email',
         'phone',
+        'reminder_sent_at',
     ];
 
     protected $casts = [
         'user_id' => 'integer',
         'service_id' => 'integer',
         'booking_date' => 'datetime',
+        'reminder_sent_at' => 'datetime',
         'status' => 'string',
         'notes' => 'string',
         'name' => 'string',
@@ -33,6 +35,7 @@ class Booking extends Model
         'phone' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+
     ];
 
     public function user(): BelongsTo
