@@ -25,7 +25,7 @@ class BookingController extends Controller
     {
         $query = Booking::with([
             'user:id,name,email',
-            'service:id,name'
+            'service:id,name',
         ]);
 
         if ($request->filled('status')) {
@@ -44,7 +44,6 @@ class BookingController extends Controller
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
-
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
@@ -58,19 +57,51 @@ class BookingController extends Controller
             });
         }
 
-
         $perPage = min(
             (int) $request->get('per_page', 15),
             100
         );
 
+        $bookings = $query
+            ->latest('booking_date')
+            ->paginate($perPage)
+            ->through(function ($booking) {
+                return [
+                    'id' => $booking->id,
+                    'user_id' => $booking->user_id,
+                    'service_id' => $booking->service_id,
 
-        return response()->json(
-            $query
-                ->latest('booking_date')
-                ->paginate($perPage)
-                ->withQueryString()
-        );
+                    'booking_date' => $booking->booking_date
+                        ? $booking->booking_date
+                        ->timezone('Asia/Manila')
+                        ->format('Y-m-d H:i:s')
+                        : null,
+
+                    'date' => $booking->booking_date
+                        ? $booking->booking_date
+                        ->timezone('Asia/Manila')
+                        ->format('Y-m-d')
+                        : null,
+
+                    'time' => $booking->booking_date
+                        ? $booking->booking_date
+                        ->timezone('Asia/Manila')
+                        ->format('H:i')
+                        : null,
+
+                    'status' => $booking->status,
+                    'notes' => $booking->notes,
+                    'name' => $booking->name,
+                    'email' => $booking->email,
+                    'phone' => $booking->phone,
+                    'service' => $booking->service,
+                    'user' => $booking->user,
+                    'created_at' => $booking->created_at,
+                    'updated_at' => $booking->updated_at,
+                ];
+            });
+
+        return response()->json($bookings);
     }
 
     /**
@@ -266,7 +297,6 @@ class BookingController extends Controller
     {
         try {
             $validated = $request->validate([
-                'service_id' => ['required', 'exists:services,id'],
                 'month' => ['required', 'date_format:Y-m'],
             ]);
 
@@ -277,7 +307,6 @@ class BookingController extends Controller
             $end = $start->copy()->endOfMonth();
 
             $bookedSlots = Booking::query()
-                ->where('service_id', $validated['service_id'])
                 ->whereBetween('booking_date', [$start, $end])
                 ->whereIn('status', ['pending', 'confirmed'])
                 ->orderBy('booking_date')
