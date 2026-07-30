@@ -37,7 +37,6 @@ class ServiceController extends Controller
         $perPage = $request->get('per_page', 10);
 
         $services = $query
-            ->latest()
             ->paginate($perPage)
             ->withQueryString();
 
