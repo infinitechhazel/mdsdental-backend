@@ -8,17 +8,16 @@ use App\Mail\NewBookingAdmin;
 use App\Mail\BookingConfirmed;
 use App\Mail\BookingCancelled;
 use App\Mail\BookingReminder;
-
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 class BookingMailer
 {
-
     public function received(Booking $booking): void
     {
-        try {
+        $this->loadRelations($booking);
 
+        try {
             $customerEmail = $booking->email
                 ?? optional($booking->user)->email;
 
@@ -27,7 +26,6 @@ class BookingMailer
                     ->send(new BookingReceived($booking));
             }
 
-
             $adminEmail = config('mail.admin_email');
 
             if ($adminEmail) {
@@ -35,7 +33,6 @@ class BookingMailer
                     ->send(new NewBookingAdmin($booking));
             }
         } catch (\Exception $e) {
-
             Log::error(
                 'Booking received email failed: ' . $e->getMessage()
             );
@@ -68,10 +65,12 @@ class BookingMailer
 
     private function send(Booking $booking, $mail): void
     {
-        try {
+        $this->loadRelations($booking);
 
+        try {
             $email = $booking->email
                 ?? optional($booking->user)->email;
+
             if ($email) {
                 Mail::to($email)
                     ->send($mail);
@@ -81,5 +80,13 @@ class BookingMailer
                 'Booking email failed: ' . $e->getMessage()
             );
         }
+    }
+
+    private function loadRelations(Booking $booking): void
+    {
+        $booking->loadMissing([
+            'user:id,name,email',
+            'service:id,name',
+        ]);
     }
 }

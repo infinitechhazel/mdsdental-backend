@@ -123,7 +123,7 @@
                                 welcoming you and providing you with the best possible service.
                             </p>
 
-                           
+
 
                             <h3
                                 style="margin:0 0 15px;color:#111111;font-size:16px;border-bottom:2px solid #1d4ed8;padding-bottom:8px;">
@@ -146,6 +146,18 @@
 
                                 <tr>
                                     <td class="label"
+                                        style="width:35%;padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        Service
+                                    </td>
+
+                                    <td class="value"
+                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;font-weight:bold;">
+                                        {{ $booking->service?->name ?? 'N/A' }}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="label"
                                         style="padding:12px 0;color:#666666;font-size:14px;">
                                         Status
                                     </td>
@@ -155,40 +167,40 @@
                                         Confirmed
                                     </td>
                                 </tr>
- @if($booking->notes)
-                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-                                style="margin:0 0 25px;background:#f4f7ff;border-left:4px solid #1d4ed8;border-radius:6px;">
+                                @if($booking->notes)
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                                    style="margin:0 0 25px;background:#f4f7ff;border-left:4px solid #1d4ed8;border-radius:6px;">
 
-                                <tr>
-                                    <td style="padding:16px 18px;">
+                                    <tr>
+                                        <td style="padding:16px 18px;">
 
-                                        <p
-                                            style="margin:0 0 6px;color:#1d4ed8;font-size:13px;font-weight:bold;text-transform:uppercase;">
-                                            Message
-                                        </p>
+                                            <p
+                                                style="margin:0 0 6px;color:#1d4ed8;font-size:13px;font-weight:bold;text-transform:uppercase;">
+                                                Message
+                                            </p>
 
-                                        <p style="margin:0;color:#333333;font-size:14px;line-height:1.7;">
-                                            {{ $booking->notes }}
-                                        </p>
+                                            <p style="margin:0;color:#333333;font-size:14px;line-height:1.7;">
+                                                {{ $booking->notes }}
+                                            </p>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
 
-                            </table>
-                            @endif
+                                </table>
+                                @endif
                             </table>
 
                             <p style="margin:25px 0 0;color:#666666;font-size:14px;line-height:1.8;">
-                                Please arrive a few minutes before your scheduled appointment. If you need to make any changes, kindly contact our clinic in advance. 
+                                Please arrive a few minutes before your scheduled appointment. If you need to make any changes, kindly contact our clinic in advance.
                                 This is an automated email, and replies to this message are not monitored.
                             </p>
 
                             </p>
 
                         </td>
-                        
+
                     </tr>
-                    
+
 
                     <!-- Footer -->
                     <tr>

@@ -150,6 +150,18 @@
 
                                 <tr>
                                     <td class="label"
+                                        style="width:35%;padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        Service
+                                    </td>
+
+                                    <td class="value"
+                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;font-weight:bold;">
+                                        {{ $booking->service?->name ?? 'N/A' }}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="label"
                                         style="padding:12px 0;color:#666666;font-size:14px;">
                                         Status
                                     </td>
