@@ -257,4 +257,39 @@ class BookingController extends Controller
         $booking->delete();
         return response()->json(['message' => 'Booking deleted successfully.']);
     }
+
+    /**
+     * GET /api/bookings/booked-slots
+     * Get all booked slots for a service within a month.  
+     */
+    public function getBookedSlots(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'service_id' => ['required', 'exists:services,id'],
+                'month' => ['required', 'date_format:Y-m'],
+            ]);
+
+            $start = Carbon::parse(
+                $validated['month'] . '-01'
+            )->startOfMonth();
+
+            $end = $start->copy()->endOfMonth();
+
+            $bookedSlots = Booking::query()
+                ->where('service_id', $validated['service_id'])
+                ->whereBetween('booking_date', [$start, $end])
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->orderBy('booking_date')
+                ->pluck('booking_date')
+                ->map(fn($date) => Carbon::parse($date)->format('Y-m-d H:i'));
+
+            return response()->json($bookedSlots);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ], 500);
+        }
+    }
 }

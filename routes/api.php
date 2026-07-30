@@ -20,20 +20,15 @@ use App\Http\Controllers\FacilityController;
 |--------------------------------------------------------------------------
 */
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
-   Route::get('/facilities', [FacilityController::class, 'index']);
+Route::get('/facilities', [FacilityController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Facilities CRUD
- 
+
     Route::post('/facilities', [FacilityController::class, 'store']);
     Route::put('/facilities/{facility}', [FacilityController::class, 'update']);
     Route::delete('/facilities/{facility}', [FacilityController::class, 'destroy']);
-    
+
     // Alternative: Use RESTful resource routing
     // Route::apiResource('facilities', FacilityController::class);
 });
@@ -53,11 +48,40 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/about/tech/{id}', [AboutController::class, 'destroyTech']);
 });
 // ── Health Check ──────────────────────────────────────────────────────────────
-Route::get('/health', fn () => response()->json([
+Route::get('/health', fn() => response()->json([
     'success'   => true,
     'message'   => 'API is running!',
     'timestamp' => now()->toISOString(),
 ]));
+
+// ── Contacts (public write, no auth needed for form submissions) ──────────────
+Route::prefix('contacts')->group(function () {
+    Route::post('/',             [ContactController::class, 'store']);
+    Route::get('/',              [ContactController::class, 'index']);
+    Route::get('/today-count',   [ContactController::class, 'todayCount']);
+    Route::get('/{contact}',     [ContactController::class, 'show']);
+    Route::delete('/{contact}',  [ContactController::class, 'destroy']);
+});
+
+// ── Testimonials ──────────────────────────────────────────────────────────────
+Route::get('/testimonials',              [TestimonialController::class, 'index']);
+Route::post('/testimonials',             [TestimonialController::class, 'store']);
+Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update']);
+Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
+
+// ── Case Studies ──────────────────────────────────────────────────────────────
+Route::get('/cases',         [CaseStudyController::class, 'index']);
+Route::get('/cases/{id}',    [CaseStudyController::class, 'show']);
+Route::post('/cases',        [CaseStudyController::class, 'store']);
+Route::put('/cases/{id}',    [CaseStudyController::class, 'update']);
+Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
+Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/services/{service}', [ServiceController::class, 'show']);
+
+//    (Public) Bookings - Get all occupied time slots within a month
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/bookings/booked-slots', [BookingController::class, 'getBookedSlots']);
+});
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 Route::prefix('auth')->group(function () {
@@ -72,31 +96,8 @@ Route::prefix('auth')->group(function () {
 });
 
 // ── Authenticated user helper ─────────────────────────────────────────────────
-Route::middleware('auth:sanctum')->get('/user', fn (Request $r) => $r->user());
+Route::middleware('auth:sanctum')->get('/user', fn(Request $r) => $r->user());
 
-// ── Contacts (public write, no auth needed for form submissions) ──────────────
-Route::prefix('contacts')->group(function () {
-    Route::post('/',             [ContactController::class, 'store']);
-    Route::get('/',              [ContactController::class, 'index']);
-    Route::get('/today-count',   [ContactController::class, 'todayCount']);
-    Route::get('/{contact}',     [ContactController::class, 'show']);
-    Route::delete('/{contact}',  [ContactController::class, 'destroy']);
-});
-
-// ── Testimonials ──────────────────────────────────────────────────────────────
-Route::get('/testimonials',              [TestimonialController::class, 'index']);
-Route::post('/testimonials',             [TestimonialController::class, 'store']);
-Route::put('/testimonials/{testimonial}',[TestimonialController::class, 'update']);
-Route::delete('/testimonials/{testimonial}',[TestimonialController::class, 'destroy']);
-
-// ── Case Studies ──────────────────────────────────────────────────────────────
-Route::get('/cases',         [CaseStudyController::class, 'index']);
-Route::get('/cases/{id}',    [CaseStudyController::class, 'show']);
-Route::post('/cases',        [CaseStudyController::class, 'store']);
-Route::put('/cases/{id}',    [CaseStudyController::class, 'update']);
-Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
-Route::get('/services', [ServiceController::class, 'index']);
-Route::get('/services/{service}', [ServiceController::class, 'show']);
 // ── Protected routes (auth:sanctum) ──────────────────────────────────────────
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -104,14 +105,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users',        [UserController::class, 'index']);
     Route::get('/users/{id}',   [UserController::class, 'show']);
     Route::put('/users/{id}',   [UserController::class, 'update']);
-    Route::delete('/users/{id}',[UserController::class, 'destroy']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     // ── Settings ──────────────────────────────────────────────────────────
     Route::get('/settings', [SettingController::class, 'show']);
     Route::put('/settings', [SettingController::class, 'update']);
 
     // ── Services ──────────────────────────────────────────────────────────
-        Route::post('/services', [ServiceController::class, 'store']);
+    Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/services/{service}', [ServiceController::class, 'update']);
     Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
     // ── Inventory ─────────────────────────────────────────────────────────
@@ -134,7 +135,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/bookings/{id}',      [BookingController::class, 'update']);
     Route::delete('/bookings/{id}',   [BookingController::class, 'destroy']);
 
-    // FIX: Admin approve / reject — PATCH /api/bookings/{id}/status
-    // Frontend calls: fetch(`${API_URL}/api/bookings/${id}/status`, { method: "PATCH" })
+    // (Admin) approve / reject — PATCH /api/bookings/{id}/status
     Route::patch('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
 });
