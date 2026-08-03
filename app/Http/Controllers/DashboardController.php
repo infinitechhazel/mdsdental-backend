@@ -1,39 +1,53 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $today = Carbon::today();
 
+        $month = $request->integer('month', now()->month);
+        $year = $request->integer('year', now()->year);
+
+        $monthlyRevenue = Booking::with('service')
+            ->whereYear('booking_date', $year)
+            ->whereMonth('booking_date', $month)
+            ->get()
+            ->sum(fn($booking) => $booking->service?->price ?? 0);
+
         return response()->json([
-            "todays_bookings" => Booking::whereDate('scheduled_at', $today)->count(),
+            'todays_bookings' => Booking::whereDate('booking_date', $today)
+                ->count(),
 
-            "active_patients" => Booking::distinct('patient_email')->count('patient_email'),
+            'active_patients' => Booking::whereYear('booking_date', $year)
+                ->whereMonth('booking_date', $month)
+                ->distinct()
+                ->count('email'),
 
-            "monthly_revenue" => Booking::whereMonth('scheduled_at', $today->month)
-                ->sum('amount'),
+            'monthly_revenue' => $monthlyRevenue,
 
-            "pending_followups" => Booking::where('status', 'Pending')->count(),
+            'pending_appointments' => Booking::where('status', 'pending')
+                ->count(),
 
-            "recent_bookings" => Booking::latest()
+            'recent_bookings' => Booking::with('service')
+                ->latest('booking_date')
                 ->take(5)
                 ->get()
-                ->map(fn ($b) => [
-                    "patient" => $b->patient_name,
-                    "service" => $b->service,
-                    "time" => $b->scheduled_at->format('h:i A'),
-                    "status" => $b->status,
-                    "avatar" => collect(explode(' ', $b->patient_name))
-                        ->map(fn ($w) => strtoupper($w[0]))
-                        ->take(2)
-                        ->implode(''),
-                ]),
+                ->map(function ($booking) {
+                    return [
+                        'name' => $booking->name,
+                        'service' => $booking->service?->name,
+                        'booking_date' => $booking->booking_date,
+                        'booking_time' => $booking->booking_time,
+                        'status' => $booking->status,
+                    ];
+                }),
         ]);
     }
 }

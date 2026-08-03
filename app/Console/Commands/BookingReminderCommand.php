@@ -13,8 +13,6 @@ class BookingReminderCommand extends Command
     protected $signature = 'bookings:reminder';
 
     protected $description = 'Send reminder emails one day before appointments';
-
-
     public function handle()
     {
         $target = now()->addDay();
