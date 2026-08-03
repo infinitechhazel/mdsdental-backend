@@ -15,7 +15,8 @@ class DashboardController extends Controller
         $month = $request->integer('month', now()->month);
         $year = $request->integer('year', now()->year);
 
-        $monthlyRevenue = Booking::with('service')
+        $monthlyRevenue = Booking::with('service:id,price')
+            ->where('status', 'confirmed')
             ->whereYear('booking_date', $year)
             ->whereMonth('booking_date', $month)
             ->get()
