@@ -17,10 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            $table->enum('category', [
-                'Dental',
-                'Aesthetic',
-            ]);
+            $table->string('category');
 
             $table->decimal('price', 10, 2);
 

@@ -14,6 +14,7 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'service_id',
+        'branch',
         'booking_date',
         'status',
         'notes',
@@ -29,6 +30,7 @@ class Booking extends Model
         'booking_date' => 'datetime',
         'reminder_sent_at' => 'datetime',
         'status' => 'string',
+         'branch' => 'string',
         'notes' => 'string',
         'name' => 'string',
         'email' => 'string',

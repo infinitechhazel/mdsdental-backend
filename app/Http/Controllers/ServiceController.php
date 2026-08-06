@@ -48,7 +48,7 @@ class ServiceController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|in:Dental,Aesthetic',
+            'category' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'status' => 'required|in:Active,Inactive',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -77,7 +77,7 @@ class ServiceController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|in:Dental,Aesthetic',
+            'category' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'status' => 'required|in:Active,Inactive',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',

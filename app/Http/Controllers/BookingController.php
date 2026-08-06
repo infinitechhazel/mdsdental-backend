@@ -70,6 +70,7 @@ class BookingController extends Controller
                     'id' => $booking->id,
                     'user_id' => $booking->user_id,
                     'service_id' => $booking->service_id,
+                    'branch' => $booking->branch,
 
                     'booking_date' => $booking->booking_date
                         ? $booking->booking_date
@@ -132,6 +133,8 @@ class BookingController extends Controller
                         ]
                         : null,
 
+                    'branch' => $booking->branch,
+
                     'booking_date' => $dateTime
                         ? $dateTime->format('Y-m-d H:i:s')
                         : null,
@@ -174,6 +177,7 @@ class BookingController extends Controller
             'user_id'      => 'nullable|exists:users,id',
             'service_id'   => 'required|exists:services,id',
             'booking_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'branch'       => 'nullable|string|max:100',
             'date'         => 'nullable|date',
             'time'         => 'nullable|string',
             'status'       => 'nullable|in:pending,confirmed,cancelled',
@@ -242,6 +246,7 @@ class BookingController extends Controller
             'user_id'      => 'nullable|exists:users,id',
             'service_id'   => 'nullable|exists:services,id',
             'booking_date' => 'nullable|date_format:Y-m-d H:i:s',
+            'branch'       => 'nullable|string|max:100',
             'status'       => 'nullable|in:pending,confirmed,cancelled',
             'notes'        => 'nullable|string|max:1000',
             'name'         => 'nullable|string|max:255',

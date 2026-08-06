@@ -24,6 +24,9 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
+            $table->string('branch')
+                ->nullable();
+
             $table->dateTime('booking_date');
 
             $table->dateTime('reminder_sent_at')
