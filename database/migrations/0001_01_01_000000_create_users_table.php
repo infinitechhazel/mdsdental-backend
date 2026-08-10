@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -19,14 +16,19 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('password');
 
-            $table->enum('role', ['admin', 'customer'])->default('customer');
-            $table->enum('status', ['active', 'inactive', 'deactivated'])->default('active');
+            $table->enum('role', ['admin', 'customer'])
+                ->default('customer');
+
+            $table->enum('status', ['active', 'inactive', 'deactivated'])
+                ->default('active');
 
             $table->string('verification_token')->nullable();
             $table->timestamp('verification_token_expiry')->nullable();
+
             $table->boolean('email_verified')->default(false);
 
             $table->rememberToken();
+
             $table->timestamps();
             $table->softDeletes();
         });

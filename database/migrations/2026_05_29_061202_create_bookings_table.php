@@ -6,57 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('service_id')->nullable();
 
-            $table->foreignId('service_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
-
-            $table->string('branch')
-                ->nullable();
+            $table->string('branch')->nullable();
 
             $table->dateTime('booking_date');
+            $table->dateTime('reminder_sent_at')->nullable();
 
-            $table->dateTime('reminder_sent_at')
-                ->nullable();
+            $table->string('status')->default('pending');
 
-            $table->enum('status', [
-                'pending',
-                'confirmed',
-                'cancelled',
-            ])->default('pending');
+            $table->text('notes')->nullable();
 
-            $table->text('notes')
-                ->nullable();
-
-            $table->string('name')
-                ->nullable();
-
-            $table->string('email')
-                ->nullable();
-
-            $table->string('phone')
-                ->nullable();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('bookings');
