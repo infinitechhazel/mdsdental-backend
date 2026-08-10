@@ -10,7 +10,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: #eef1f5;
+            background: #eef5f1;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -84,17 +84,17 @@
 <body>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
-        style="background:#eef1f5;padding:40px 15px;">
+        style="background:#eef5f1;padding:40px 15px;">
 
         <tr>
             <td align="center">
 
                 <table class="container" role="presentation" width="100%" cellpadding="0" cellspacing="0"
-                    style="max-width:600px;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+                    style="max-width:600px;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(15,61,46,.10);">
 
                     <!-- Header -->
                     <tr>
-                        <td class="header" style="background:#111827;padding:28px 30px;">
+                        <td class="header" style="background:#166534;padding:28px 30px;">
 
                             <table role="presentation" width="100%">
                                 <tr class="mobile-stack">
@@ -105,7 +105,7 @@
 
                                     <td class="mobile-badge" align="right">
                                         <span
-                                            style="display:inline-block;background:#1d4ed8;color:#ffffff;font-size:12px;font-weight:bold;padding:7px 14px;border-radius:30px;letter-spacing:.5px;">
+                                            style="display:inline-block;background:#ffffff;color:#166534;font-size:12px;font-weight:bold;padding:7px 14px;border-radius:30px;letter-spacing:.5px;">
                                             NEW BOOKING
                                         </span>
                                     </td>
@@ -120,7 +120,7 @@
                     <tr>
                         <td class="content" style="padding:35px 30px;">
 
-                            <h2 style="margin:0 0 18px;color:#111111;font-size:24px;">
+                            <h2 style="margin:0 0 18px;color:#17251f;font-size:24px;">
                                 New Booking Received
                             </h2>
 
@@ -129,8 +129,9 @@
                                 Please review the booking details below and confirm or decline the appointment.
                             </p>
 
+                            <!-- Customer Information -->
                             <h3
-                                style="margin:0 0 15px;color:#111111;font-size:16px;border-bottom:2px solid #1d4ed8;padding-bottom:8px;">
+                                style="margin:0 0 15px;color:#17251f;font-size:16px;border-bottom:2px solid #16a34a;padding-bottom:8px;">
                                 Customer Information
                             </h3>
 
@@ -139,12 +140,12 @@
 
                                 <tr>
                                     <td class="label"
-                                        style="width:35%;padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        style="width:35%;padding:12px 0;border-bottom:1px solid #e5ebe7;color:#66736d;font-size:14px;">
                                         Name
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;font-weight:bold;">
+                                        style="padding:12px 0;border-bottom:1px solid #e5ebe7;color:#17251f;font-size:14px;font-weight:bold;">
                                         {{ $booking->name }}
                                     </td>
                                 </tr>
@@ -152,12 +153,12 @@
                                 @if($booking->email)
                                 <tr>
                                     <td class="label"
-                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        style="padding:12px 0;border-bottom:1px solid #e5ebe7;color:#66736d;font-size:14px;">
                                         Email
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;">
+                                        style="padding:12px 0;border-bottom:1px solid #e5ebe7;color:#17251f;font-size:14px;">
                                         {{ $booking->email }}
                                     </td>
                                 </tr>
@@ -166,12 +167,12 @@
                                 @if($booking->phone)
                                 <tr>
                                     <td class="label"
-                                        style="padding:12px 0;color:#666666;font-size:14px;">
+                                        style="padding:12px 0;color:#66736d;font-size:14px;">
                                         Phone
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;color:#111111;font-size:14px;">
+                                        style="padding:12px 0;color:#17251f;font-size:14px;">
                                         {{ $booking->phone }}
                                     </td>
                                 </tr>
@@ -179,8 +180,9 @@
 
                             </table>
 
+                            <!-- Booking Details -->
                             <h3
-                                style="margin:0 0 15px;color:#111111;font-size:16px;border-bottom:2px solid #1d4ed8;padding-bottom:8px;">
+                                style="margin:0 0 15px;color:#17251f;font-size:16px;border-bottom:2px solid #16a34a;padding-bottom:8px;">
                                 Booking Details
                             </h3>
 
@@ -188,45 +190,41 @@
 
                                 <tr>
                                     <td class="label"
-                                        style="width:35%;padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        style="width:35%;padding:12px 0;border-bottom:1px solid #e5ebe7;color:#66736d;font-size:14px;">
                                         Appointment Date
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;font-weight:bold;">
+                                        style="padding:12px 0;border-bottom:1px solid #e5ebe7;color:#17251f;font-size:14px;font-weight:bold;">
                                         {{ \Carbon\Carbon::parse($booking->booking_date)->format('F d, Y g:i A') }}
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td class="label"
-                                        style="width:35%;padding:12px 0;border-bottom:1px solid #eeeeee;color:#666666;font-size:14px;">
+                                        style="width:35%;padding:12px 0;border-bottom:1px solid #e5ebe7;color:#66736d;font-size:14px;">
                                         Service
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;border-bottom:1px solid #eeeeee;color:#111111;font-size:14px;font-weight:bold;">
+                                        style="padding:12px 0;border-bottom:1px solid #e5ebe7;color:#17251f;font-size:14px;font-weight:bold;">
                                         {{ $booking->service?->name ?? 'N/A' }}
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td class="label"
-                                        style="padding:12px 0;color:#666666;font-size:14px;">
+                                        style="padding:12px 0;color:#66736d;font-size:14px;">
                                         Status
                                     </td>
 
                                     <td class="value"
-                                        style="padding:12px 0;color:#1d4ed8;font-size:14px;font-weight:bold;">
+                                        style="padding:12px 0;color:#15803d;font-size:14px;font-weight:bold;">
                                         Pending Review
                                     </td>
                                 </tr>
 
                             </table>
-
-
-
-
 
                         </td>
                     </tr>
@@ -234,9 +232,9 @@
                     <!-- Footer -->
                     <tr>
                         <td class="footer"
-                            style="background:#f4f6fa;padding:24px 30px;text-align:center;">
+                            style="background:#f3f7f5;padding:24px 30px;text-align:center;">
 
-                            <p style="margin:0;color:#999999;font-size:12px;line-height:20px;">
+                            <p style="margin:0;color:#8a9690;font-size:12px;line-height:20px;">
                                 This is an automated system notification from
                                 <strong>{{ config('app.name') }}</strong>.
                             </p>
