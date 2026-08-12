@@ -107,10 +107,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{id}',   [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
-    // ── Settings ──────────────────────────────────────────────────────────
-    Route::get('/settings', [SettingController::class, 'show']);
-    Route::put('/settings', [SettingController::class, 'update']);
-
     // ── Services ──────────────────────────────────────────────────────────
     Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/services/{service}', [ServiceController::class, 'update']);
