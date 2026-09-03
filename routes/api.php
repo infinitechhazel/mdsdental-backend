@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\CaseStudyController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AboutController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BranchImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DentalCaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +85,15 @@ Route::prefix('contacts')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| Dental Cases
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/cases', [DentalCaseController::class, 'index']);
+Route::get('/cases/{dentalCase}', [DentalCaseController::class, 'show']);
+
+/*
+|--------------------------------------------------------------------------
 | Testimonials
 |--------------------------------------------------------------------------
 */
@@ -93,18 +102,6 @@ Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::post('/testimonials', [TestimonialController::class, 'store']);
 Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update']);
 Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy']);
-
-/*
-|--------------------------------------------------------------------------
-| Case Studies
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/cases', [CaseStudyController::class, 'index']);
-Route::get('/cases/{id}', [CaseStudyController::class, 'show']);
-Route::post('/cases', [CaseStudyController::class, 'store']);
-Route::put('/cases/{id}', [CaseStudyController::class, 'update']);
-Route::delete('/cases/{id}', [CaseStudyController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------
@@ -330,4 +327,10 @@ Route::middleware('auth:sanctum')->group(function () {
         '/events/{eventId}',
         [EventController::class, 'destroy']
     );
+
+    /// Dental Cases - Admin
+    Route::post('/cases', [DentalCaseController::class, 'store']);
+    Route::put('/cases/{dentalCase}', [DentalCaseController::class, 'update']);
+    Route::patch('/cases/{dentalCase}', [DentalCaseController::class, 'update']);
+    Route::delete('/cases/{dentalCase}', [DentalCaseController::class, 'destroy']);
 });
