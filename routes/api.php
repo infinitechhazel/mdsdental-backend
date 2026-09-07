@@ -16,7 +16,7 @@ use App\Http\Controllers\BranchImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DentalCaseController;
-
+use App\Http\Controllers\ServiceCategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -164,6 +164,15 @@ Route::get('/branch-images/{imageId}', [BranchImageController::class, 'show']);
 
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{eventId}', [EventController::class, 'show']);
+
+/*
+|--------------------------------------------------------------------------
+| Service Categories - Public
+|--------------------------------------------------------------------------
+*/
+
+Route::get('service-categories', [ServiceCategoryController::class, 'index']);
+Route::get('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -333,4 +342,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/cases/{dentalCase}', [DentalCaseController::class, 'update']);
     Route::patch('/cases/{dentalCase}', [DentalCaseController::class, 'update']);
     Route::delete('/cases/{dentalCase}', [DentalCaseController::class, 'destroy']);
+
+
+    /// Service Category - Admin
+    Route::post('service-categories', [ServiceCategoryController::class, 'store']);
+    Route::put('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'update']);
+    Route::delete('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'destroy']);
 });
