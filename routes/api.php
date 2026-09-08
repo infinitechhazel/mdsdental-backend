@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DentalCaseController;
 use App\Http\Controllers\ServiceCategoryController;
+use App\Http\Controllers\TeamController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -173,6 +175,14 @@ Route::get('/events/{eventId}', [EventController::class, 'show']);
 
 Route::get('service-categories', [ServiceCategoryController::class, 'index']);
 Route::get('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'show']);
+
+/*
+|--------------------------------------------------------------------------
+| Team - Public
+|--------------------------------------------------------------------------
+*/
+Route::get('/teams', [TeamController::class, 'index']);
+Route::get('/teams/{id}', [TeamController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -348,4 +358,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('service-categories', [ServiceCategoryController::class, 'store']);
     Route::put('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'update']);
     Route::delete('service-categories/{serviceCategory}', [ServiceCategoryController::class, 'destroy']);
+
+    // Team - Admin
+    Route::post('/teams', [TeamController::class, 'store']);
+    Route::put('/teams/{id}', [TeamController::class, 'update']);
+    Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
 });
